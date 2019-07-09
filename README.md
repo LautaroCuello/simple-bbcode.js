@@ -1,7 +1,7 @@
 # Simple-bbcode.js
 A simple BBCode interpreter/editor developed in JS.
 
-#Usage
+# Usage
 
 Add Simple-bbcode.js to your file.
 
