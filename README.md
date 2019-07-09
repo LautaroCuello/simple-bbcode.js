@@ -5,13 +5,13 @@ A simple BBCode interpreter/editor developed in JS.
 
 Add Simple-bbcode.js to your file.
 
-```
+```js
 <script src="simple-bbcode.js"></script>
 ```
 
 Configure the script to suit your needs looking for those variables shown below.
 
-```
+```js
 var bbcode_editor = true; // If you want to use the BBCode Editor code.
 var buttons_target = "#bbcode-buttons"; // Buttons id target.
 var button_class = '"btn btn-primary"'; // CSS Classes of the generated buttons.
