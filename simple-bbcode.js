@@ -20,9 +20,10 @@
     - Added new bbcode options, added configuration with FA, fixed incompatibilites between bbcodes,
     fixed performance issues regarding simplifying regex code.
 
- */
+    v0.4:
+    - Fixed tags not working as intended (Align and List)
 
-// (^([a-zA-Z0-9!#$%&'*+\-/=?^_`{|}~][a-zA-Z0-9!#$%&'*+\-\./=?^_`{|}~]+[a-zA-Z0-9!#$%&'*+\-/=?^_`{|}~])[@]([a-zA-Z0-9]+)[\.]([a-zA-Z]{2,})+[\.]?([a-zA-Z]{2})+?$) Email
+ */
 
 // Configuration
 
@@ -57,51 +58,51 @@ window.onload = function(){
 
 function replaceTags(target){
     reg_exp_list = [
+        // List
+        [new RegExp('(\\[list\\]\\n)([\\s\\S]+?)(\\[\\/list\\])', 'g'), '<ul>$2</ul>'],
+        [new RegExp('(\\[list=1\\])([\\s\\S]+?)(\\[\\/list\\])', 'g'), '<ol>$2</ol>'],
+        [new RegExp('(\\[list=a\\])([\\s\\S]+?)(\\[\\/list\\])', 'g'), '<ol style="list-style: lower-alpha;">$2</ol>'],
+        [new RegExp('(\\[list=A\\])([\\s\\S]+?)(\\[\\/list\\])', 'g'), '<ol style="list-style: upper-alpha;">$2</ol>'],
+        [new RegExp('(\\[\\*\\])(.+?[\\n])', 'g'), '<li>$2</li>'],
+        
         // Appearance
-        [new RegExp('(\\[b\\])(.*)(\\[\\/b\\])', 'g'), '<b>$2</b>'],
-        [new RegExp('(\\[u\\])(.*)(\\[\\/u\\])', 'g'), '<u>$2</u>'],
-        [new RegExp('(\\[i\\])(.*)(\\[\\/i\\])', 'g'), '<i>$2</i>'],
-        [new RegExp('(\\[s\\])(.*)(\\[\\/s\\])', 'g'), '<s>$2</s>'],
-        [new RegExp('(\\[size=([0-9]{1,2})\\])(.*)(\\[\\/size\\])', 'g'), '<span style="font-size: $2pt">$3</span>'],
+        [new RegExp('(\\[b\\])(.+?)(\\[\\/b\\])', 'g'), '<b>$2</b>'],
+        [new RegExp('(\\[u\\])(.+?)(\\[\\/u\\])', 'g'), '<u>$2</u>'],
+        [new RegExp('(\\[i\\])(.+?)(\\[\\/i\\])', 'g'), '<i>$2</i>'],
+        [new RegExp('(\\[s\\])(.+?)(\\[\\/s\\])', 'g'), '<s>$2</s>'],
+        [new RegExp('(\\[size=([0-9]{1,2})\\])(.+?)(\\[\\/size\\])', 'g'), '<span style="font-size: $2pt">$3</span>'],
 
         // Align
-        [new RegExp('(\\[align="left"\\])(.*)(\\[\\/align\\])', 'g'), '<span style="text-align:left">$2</span>'],
-        [new RegExp('(\\[align="right"\\])(.*)(\\[\\/align\\])', 'g'), '<p style="text-align:right">$2</p>'],
-        [new RegExp('(\\[align="center"\\])(.*)(\\[\\/align\\])', 'g'), '<span style="text-align:center">$2</span>'],
-        [new RegExp('(\\[align="justify"\\])(.*)(\\[\\/align\\])', 'g'), '<p style="text-align:justify">$2</p>'],
-        [new RegExp('(\\[left\\])(.*)(\\[\\/left\\])', 'g'), '<span style="text-align:left">$2</span>'],
-        [new RegExp('(\\[right\\])(.*)(\\[\\/right\\])', 'g'), '<span style="text-align:right">$2</span>'],
-        [new RegExp('(\\[center\\])(.*)(\\[\\/center\\])', 'g'), '<span style="text-align:center">$2</span>'],
-        [new RegExp('(\\[justify\\])(.*)(\\[\\/justify\\])', 'g'), '<span style="text-align:justify">$2</span>'],
+        [new RegExp('(\\[align="left"\\])(.+?)(\\[\\/align\\])', 'g'), '<p style="text-align: left;">$2</p>'],
+        [new RegExp('(\\[align="right"\\])(.+?)(\\[\\/align\\])', 'g'), '<p style="text-align: right;">$2</p>'],
+        [new RegExp('(\\[align="center"\\])(.+?)(\\[\\/align\\])', 'g'), '<p style="text-align: center;">$2</p>'],
+        [new RegExp('(\\[align="justify"\\])(.+?)(\\[\\/align\\])', 'g'), '<p style="text-align: justify;">$2</p>'],
+        [new RegExp('(\\[left\\])(.+?)(\\[\\/left\\])', 'g'), '<p style="text-align: left;">$2</p>'],
+        [new RegExp('(\\[right\\])(.+?)(\\[\\/right\\])', 'g'), '<p style="text-align: right;">$2</p>'],
+        [new RegExp('(\\[center\\])(.+?)(\\[\\/center\\])', 'g'), '<p style="text-align: center;">$2</p>'],
+        [new RegExp('(\\[justify\\])(.+?)(\\[\\/justify\\])', 'g'), '<p style="text-align: justify;">$2</p>'],
 
         // Font TBD?
 
         // Image
-        [new RegExp('(\\[img\\])(.*)(\\[\\/img\\])', 'g'), '<img src="$2"/>'],
-        [new RegExp('(\\[img\\sw=([0-9]+)\\sh=([0-9]+)\\])(.*)(\\[\\/img\\])', 'g'), '<img style="width: $2px; height: $3px;" src="$4"/>'],
-        [new RegExp('(\\[img\\swidth=([0-9]+)\\sheight=([0-9]+)\\])(.*)(\\[\\/img\\])', 'g'), '<img style="width: $2px; height: $3px;" src="$4"/>'],
-
-        // List
-        [new RegExp('(\\[list\\])([\\s\\S]*?)(\\[\\/list\\])', 'g'), '<ul>$2</ul>'],
-        [new RegExp('(\\[list=1\\])([\\s\\S]*?)(\\[\\/list\\])', 'g'), '<ol>$2</ol>'],
-        [new RegExp('(\\[list=a\\])([\\s\\S]*?)(\\[\\/list\\])', 'g'), '<ol style="list-style: lower-alpha;">$2</ol>'],
-        [new RegExp('(\\[list=A\\])([\\s\\S]*?)(\\[\\/list\\])', 'g'), '<ol style="list-style: upper-alpha;">$2</ol>'],
-        [new RegExp('(\\[\\*\\])(.*)', 'g'), '<li>$2</li>'],
+        [new RegExp('(\\[img\\])(.+?)(\\[\\/img\\])', 'g'), '<img src="$2"/>'],
+        [new RegExp('(\\[img\\sw=([0-9]+)\\sh=([0-9]+)\\])(.+?)(\\[\\/img\\])', 'g'), '<img style="width: $2px; height: $3px;" src="$4"/>'],
+        [new RegExp('(\\[img\\swidth=([0-9]+)\\sheight=([0-9]+)\\])(.+?)(\\[\\/img\\])', 'g'), '<img style="width: $2px; height: $3px;" src="$4"/>'],
 
         // Colour
-        [new RegExp('(\\[color=(#[a-fA-F0-9]{6})\\])(.*)(\\[\\/color\\])', 'g'), '<span style="color: $2;">$3</span>'],
-        [new RegExp('(\\[color=(#[a-fA-F0-9]{3})\\])(.*)(\\[\\/color\\])', 'g'), '<span style="color: $2;">$3</span>'],
+        [new RegExp('(\\[color=(#[a-fA-F0-9]{6})\\])(.+?)(\\[\\/color\\])', 'g'), '<span style="color: $2;">$3</span>'],
+        [new RegExp('(\\[color=(#[a-fA-F0-9]{3})\\])(.+?)(\\[\\/color\\])', 'g'), '<span style="color: $2;">$3</span>'],
 
         // Quote
-        [new RegExp('(\\[q="([a-zA-Z0-9]*)"\\])(.*)(\\[\\/q\\])', 'g'), '<div class="card"><div class="card-body"><h6 class="card-title">$2 dijo:</h6><p class="card-text"><p class="card-text">\"$3\"</p></div></div>'],
-        [new RegExp('(\\[q\\])(.*)(\\[\\/q\\])', 'g'), '<div class="card"><div class="card-body">\"$2\"</p></div></div>'],
+        [new RegExp('(\\[q="([a-zA-Z0-9]*)"\\])(.+?)(\\[\\/q\\])', 'g'), '<div class="card"><div class="card-body"><h6 class="card-title">$2 dijo:</h6><p class="card-text"><p class="card-text">\"$3\"</p></div></div>'],
+        [new RegExp('(\\[q\\])(.+?)(\\[\\/q\\])', 'g'), '<div class="card"><div class="card-body">\"$2\"</p></div></div>'],
 
         // Hiperlinks
-        [new RegExp('(\\[url=([a-zA-Z0-9\\-._~:\\/\\?#\\[\\]@!$&\'()*+,;%=]+)\\])(.*)(\\[\\/url\\])', 'g'), '<a href="$2">$3</a>'],
+        [new RegExp('(\\[url=([a-zA-Z0-9\\-._~:\\/\\?#\\[\\]@!$&\'()*+,;%=]+)\\])(.+?)(\\[\\/url\\])', 'g'), '<a href="$2">$3</a>'],
         [new RegExp('(\\[url\\])([a-zA-Z0-9\\-._~:\\/\\?#\\[\\]@!$&\'()*+,;%=]+)(\\[\\/url\\])', 'g'), '<a href="$2">$2</a>'],
 
         // Miscellaneous
-        [new RegExp('(\\[nl\\])|(\\[NL\\])', 'g'), '<br>'],
+        [new RegExp('(\\[nl\\])', 'g'), '<br>'],
         //[new RegExp('(\\[url="([a-zA-Z0-9\\-._~:\\/\\?#\\[\\]@!$&\'()*+,;%=]+)"\\])(\\[img\\])([a-zA-Z0-9\\-._~:\\/\\?#\\[\\]@!$&\'()*+,;%=]+)(\\[\\/img\\])(\\[\\/url\\])', 'g'), '<a href="$2"><img src="$4"/></a>'],
         //[new RegExp('(\\[url="([a-zA-Z0-9\\-._~:\\/\\?#\\[\\]@!$&\'()*+,;%=]+)"\\])(\\[img\\sw=([0-9]+)\\sh=([0-9]+)\\])([a-zA-Z0-9\\-._~:\\/\\?#\\[\\]@!$&\'()*+,;%=]+)(\\[\\/img\\])(\\[\\/url\\])', 'g'), '<a href="$2"><img style="width: $4px; height: $5px;" src="$6"/></a>'],
         //[new RegExp('(\\[url="([a-zA-Z0-9\\-._~:\\/\\?#\\[\\]@!$&\'()*+,;%=]+)"\\])(\\[img\\swidth=([0-9]+)\\sheight=([0-9]+)\\])([a-zA-Z0-9\\-._~:\\/\\?#\\[\\]@!$&\'()*+,;%=]+)(\\[\\/img\\])(\\[\\/url\\])', 'g'), '<a href="$2"><img style="width: $4px; height: $5px;" src="$6"/></a>'],
