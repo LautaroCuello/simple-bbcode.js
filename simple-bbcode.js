@@ -1,11 +1,9 @@
 /*
 
     Author: Cuello, Lautaro
-    Script: BBCodeVisualizer
-    Version: v0.4.3
-    Description: A simple custom bbcode client-side visualizer, it modifies the bbcode to html and
-    provides a couple of buttons next to a designed textarea to let the user easily write.
-    Doesn't provide style.
+    Script: Simple-BBCode.js
+    Version: v0.4.4
+    Description: A simple bbcode replacer/editor.
 
     Changelog:
 
@@ -32,11 +30,13 @@
     v0.4.3:
     - Cleaning code.
 
+    v0.4.4:
+    - Little fixes.
+
  */
 
-function replaceTags(target){ // Replaces any given ID
+function replaceTags(target){
     let reg_exp_list = [
-        // List
         [new RegExp('\\[list\\]', 'g'), '<ul>'],
         [new RegExp('\\[\\/list\\]', 'g'), '</ol>'],
         [new RegExp('\\[list=1\\]', 'g'), '<ol>'],
@@ -44,7 +44,6 @@ function replaceTags(target){ // Replaces any given ID
         [new RegExp('\\[list=A\\]', 'g'), '<ol style="list-style: upper-alpha;">'],
         [new RegExp('\\[\\*\\](.+)', 'g'), '<li>$1</li>'],
         
-        // Appearance
         [new RegExp('\\[b\\]', 'g'), '<b>'],
         [new RegExp('\\[\/b\\]', 'g'), '</b>'],
         [new RegExp('\\[u\\]', 'g'), '<u>'],
@@ -57,36 +56,27 @@ function replaceTags(target){ // Replaces any given ID
         [new RegExp('\\[\/b\\]', 'g'), '</b>'],
         [new RegExp('\\[size=([0-9]{1,2})\\]([\\s\\S]+)\\[\\/size\\]', 'g'), '<span style="font-size: $1pt">$2</span>'],
 
-        // Align
         [new RegExp('\\[align="left"\\]', 'g'), '<p style="text-align: left;">'],
         [new RegExp('\\[align="right"\\]', 'g'), '<p style="text-align: right;">'],
         [new RegExp('\\[align="center"\\]', 'g'), '<p style="text-align: center;">'],
         [new RegExp('\\[align="justify"\\]', 'g'), '<p style="text-align: justify;">'],
         [new RegExp('\\[\\/align\\]', 'g'), '</p>'],
 
-        // Font TBD?
+        // Font TBD
 
-        // Image
         [new RegExp('\\[img\\]([\\s\\S]+)\\[\\/img\\]', 'g'), '<img src="$1"/>'],
         [new RegExp('\\[img\\swidth=([0-9]+)\\sheight=([0-9]+)\\]([\\s\\S]+)\\[\\/img\\]', 'g'), '<img style="width: $1px; height: $2px;" src="$3"/>'],
 
-        // Colour
         [new RegExp('\\[color=(#[a-fA-F0-9]{6})\\]([\\s\\S]+)\\[\\/color\\]', 'g'), '<span style="color: $1;">$2</span>'],
         [new RegExp('\\[color=(#[a-fA-F0-9]{3})\\]([\\s\\S]+)\\[\\/color\\]', 'g'), '<span style="color: $1;">$2</span>'],
 
-        // Quote
         [new RegExp('\\[q="([a-zA-Z0-9]*)"\\]([\\s\\S]+)\\[\\/q\\]', 'g'), '<div class="card text-dark"><div class="card-body"><h6 class="card-title">$1 dijo:</h6><p class="card-text"><p class="card-text">\"$2\"</p></div></div>'],
         [new RegExp('\\[q\\]([\\s\\S]+)\\[\\/q\\]', 'g'), '<div class="card text-dark"><div class="card-body"><p class="card-text">\"$1\"</p></div></div>'],
 
-        // Hiperlinks
         [new RegExp('\\[url=([a-zA-Z0-9\\-._~:\\/\\?#\\[\\]@!$&\'()*+,;%=]+)\\]([\\s\\S]+)\\[\\/url\\]', 'g'), '<a href="$1">$2</a>'],
         [new RegExp('\\[url\\]([a-zA-Z0-9\\-._~:\\/\\?#\\[\\]@!$&\'()*+,;%=]+)\\[\\/url\\]', 'g'), '<a href="$1">$1</a>'],
 
-        // Miscellaneous
         [new RegExp('\\[nl\\]', 'g'), '<br>'],
-        //[new RegExp('(\\[url="([a-zA-Z0-9\\-._~:\\/\\?#\\[\\]@!$&\'()*+,;%=]+)"\\])(\\[img\\])([a-zA-Z0-9\\-._~:\\/\\?#\\[\\]@!$&\'()*+,;%=]+)(\\[\\/img\\])(\\[\\/url\\])', 'g'), '<a href="$2"><img src="$4"/></a>'],
-        //[new RegExp('(\\[url="([a-zA-Z0-9\\-._~:\\/\\?#\\[\\]@!$&\'()*+,;%=]+)"\\])(\\[img\\sw=([0-9]+)\\sh=([0-9]+)\\])([a-zA-Z0-9\\-._~:\\/\\?#\\[\\]@!$&\'()*+,;%=]+)(\\[\\/img\\])(\\[\\/url\\])', 'g'), '<a href="$2"><img style="width: $4px; height: $5px;" src="$6"/></a>'],
-        //[new RegExp('(\\[url="([a-zA-Z0-9\\-._~:\\/\\?#\\[\\]@!$&\'()*+,;%=]+)"\\])(\\[img\\swidth=([0-9]+)\\sheight=([0-9]+)\\])([a-zA-Z0-9\\-._~:\\/\\?#\\[\\]@!$&\'()*+,;%=]+)(\\[\\/img\\])(\\[\\/url\\])', 'g'), '<a href="$2"><img style="width: $4px; height: $5px;" src="$6"/></a>'],
         ];
     let result = document.querySelector(target).innerHTML;
     for(let item of reg_exp_list){
@@ -96,7 +86,7 @@ function replaceTags(target){ // Replaces any given ID
 };
 
 // Write
-function createBBCodeEditor(button_source, button_target, classes, fontawesome){
+function createBBCodeEditor(button_source, button_target, classes = '', fontawesome = false){
     let buttons_list_fa = [
         '<button type="button" class="' + classes + '" onclick="insertBBCode(\'' + button_target + '\', 0)"><i class="fa fa-bold"></i></button>',
         '<button type="button" class="' + classes + '" onclick="insertBBCode(\'' + button_target + '\', 1)"><i class="fas fa-underline"></i></button>',
