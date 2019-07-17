@@ -9,14 +9,27 @@ Add Simple-bbcode.js to your file.
 <script src="simple-bbcode.js"></script>
 ```
 
-Configure the script to suit your needs looking for those variables shown below.
+The script consist on two functions listed below from a total of three:
 
 ```js
-var bbcode_editor = true; // If you want to use the BBCode Editor code.
-var buttons_target = "#bbcode-buttons"; // Buttons id target.
-var button_class = '"btn btn-primary"'; // CSS Classes of the generated buttons.
-var buttons_fa = true; // True (free FA) or false to use text.
-var replaceTag = true; // True if you want to replace a part of the page or false to not do so.
-var text_source = "#text"; // Text input source.
-var text_target = "#textresult"; // Text result output.
+/*
+Replace tags from any given tag/id/class/etc.
+target: Replace tags from any given tag/id/class/etc.
+*/
+replaceTags(target);
+/*
+Creates a BBCodeEditor made of buttons with an onclick function associated to the script.
+button_source: ID where the buttons will be created.
+button_target: ID where the buttons would create tags.
+classes: If you want to add style to the buttons.
+fontawesome: A boolean if you want to use the free FontAwesome icons (you need to add the library)
+*/
+function createBBCodeEditor(button_source, button_target, classes, fontawesome);
+/*
+It's attached with the editor, it's how the buttons work.
+target: ID Where the tags are created.
+index: Which set of tags should be added.
+As a bonus it puts the cursor in the middle of the tag and checks if you have selected text.
+*/
+insertBBCode(target, index)
 ```
