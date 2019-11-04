@@ -1,5 +1,55 @@
-# Simple-bbcode.js
+# simplebbcode.js
 A simple BBCode interpreter/editor developed in JS.
+# v0.5 Guide:
+
+# Editor
+
+`new Editor(editorID, editorTarget, options)`
+
+* editorID: ID of the <div> or similar where the buttons will be displayed.
+* editorTarget: ID of the <textarea> or similar where the text will be written.
+* options (**optional**): An object with personalization options.
+  * buttons_text: Replace the text shown of a button with HTML.
+  * buttons_disable: Disable a button (doesn't insert it).
+  * buttons_class: Add a class to an specific buttons or all of them.
+
+Example:
+
+`new Editor('editor', 'target', {'buttons_text': {
+'bold': '<b>this is bold</b>'},
+'buttons_disable' : ['underline'],
+'buttons_class': { 'italic': 'red' }
+})`
+
+or
+
+`new Editor('editor', 'target', {'buttons_text': {
+'bold': '<b>this is bold</b>'},
+'buttons_disable' : ['underline'],
+'buttons_class': 'red'
+})`
+
+# Interpreter
+
+`new Interpreter(sourceID, options, sourceTarget, editorID);`
+
+* sourceID: ID of the <textarea>/<div> or similar where the text is written.
+* options (**optional**):
+  * bbcode_disable: Disable a bbcode type (doesn't modify it).
+* sourceTarget (**optional**): ID of the <div> or similar where the interpreted text is going to be put.
+* editorID (**optional**): ID of the <div> or similar of the editor buttons. __Recommended for live edition__
+
+`new Interpreter( 'source', { 'bbcode_disable' : ['bold'] } );`
+
+or
+
+`new Interpreter( 'source', { 'bbcode_disable' : ['bold'] }, 'target');`
+
+or
+
+`new Interpreter( 'source', { 'bbcode_disable' : ['bold'] }, 'target', 'editor');`
+
+# Older versions:
 
 # Usage
 
